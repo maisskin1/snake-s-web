@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snake · 摄影集</title>
+<meta name="description" content="Snake 的摄影集 —— 城市、旅途、光影，用镜头留下每一刻的温度。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* 摄影集 masonry 画廊 */
+.gallery-section {
+  padding-top: 0;
+}
+
+.gallery-masonry {
+  columns: 3 320px;
+  column-gap: 18px;
+  padding: 0 4px;
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+.gallery-item img,
+.gallery-item video {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.gallery-item video {
+  background: #000;
+}
+
+.gallery-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.gallery-item {
+  position: relative;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(10, 11, 26, 0.92);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-content img,
+.lightbox-content video {
+  display: block;
+  max-width: 92vw;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 1001;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 640px) {
+  .gallery-masonry {
+    column-gap: 12px;
+  }
+  .gallery-item {
+    margin-bottom: 12px;
+    border-radius: 14px;
+  }
+  .lightbox {
+    padding: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="返回首页">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.5 2c-3.5 0-5.5 2.5-5.5 5 0 2.5 2 3.5 3.5 4.5s3 2 3 4c0 2-1.5 3.5-4 3.5a6.5 6.5 0 0 1-6.5-6.5"></path>
+          <path d="M18 10.5a3.5 3.5 0 0 0-3.5 3.5c0 1.5 1 2.5 2 3.5s1.5 2 1.5 3.5c0 2.5-2 4-5 4"></path>
+          <circle cx="19.5" cy="5" r="1.5" fill="currentColor" stroke="none"></circle>
+        </svg>
+        Snake
+      </a>
+      <nav class="nav-links" role="navigation" aria-label="主导航">
+        <a href="index.html">首页</a>
+        <a href="index.html">回到上一页</a>
+      </nav>
+      <button class="icon-btn menu-toggle" id="menuBtn" aria-label="展开菜单" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="photo-hero" aria-label="摄影集">
+    <div class="container hero-grid page-hero-grid">
+      <div class="hero-content">
+        <div class="section-label"><span class="mono">Photography</span></div>
+        <div class="app-title-row">
+          <h1 class="app-title-name gradient-text">镜头里的瞬间</h1>
+        </div>
+        <p class="section-desc" style="margin-top:14px;max-width:560px;">
+          城市、旅途、光影，用镜头留下每一刻的温度。这里是我随手拍下的世界。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features gallery-section" aria-label="照片墙">
+    <div class="container">
+      <div class="gallery-masonry" id="gallery">
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-01.jpg" style="transition-delay:0ms;">
+          <img src="assets/photos/photo-01.jpg" alt="城市黄昏" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-02.jpg" style="transition-delay:40ms;">
+          <img src="assets/photos/photo-02.jpg" alt="天空与云彩" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-03.jpg" style="transition-delay:80ms;">
+          <img src="assets/photos/photo-03.jpg" alt="雨中校园" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="video" data-src="assets/photos/video-01.mp4" style="transition-delay:120ms;">
+          <span class="gallery-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            VIDEO
+          </span>
+          <video src="assets/photos/video-01.mp4" preload="metadata" controls playsinline></video>
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-04.jpg" style="transition-delay:160ms;">
+          <img src="assets/photos/photo-04.jpg" alt="雨夜城市" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-05.jpg" style="transition-delay:200ms;">
+          <img src="assets/photos/photo-05.jpg" alt="停车场一角" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-06.jpg" style="transition-delay:240ms;">
+          <img src="assets/photos/photo-06.jpg" alt="雨雾城市" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-07.jpg" style="transition-delay:280ms;">
+          <img src="assets/photos/photo-07.jpg" alt="日落城市" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-08.jpg" style="transition-delay:320ms;">
+          <img src="assets/photos/photo-08.jpg" alt="黄昏街道" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="video" data-src="assets/photos/video-02.mp4" style="transition-delay:360ms;">
+          <span class="gallery-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            VIDEO
+          </span>
+          <video src="assets/photos/video-02.mp4" preload="metadata" controls playsinline></video>
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-09.jpg" style="transition-delay:400ms;">
+          <img src="assets/photos/photo-09.jpg" alt="山路弯道" loading="eager">
+        </div>
+
+        <div class="gallery-item reveal" data-type="image" data-src="assets/photos/photo-10.jpg" style="transition-delay:440ms;">
+          <img src="assets/photos/photo-10.jpg" alt="蓝调城市夜景" loading="eager">
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="subscribe-footer" aria-label="页脚">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.5 2c-3.5 0-5.5 2.5-5.5 5 0 2.5 2 3.5 3.5 4.5s3 2 3 4c0 2-1.5 3.5-4 3.5a6.5 6.5 0 0 1-6.5-6.5"></path>
+            <path d="M18 10.5a3.5 3.5 0 0 0-3.5 3.5c0 1.5 1 2.5 2 3.5s1.5 2 1.5 3.5c0 2.5-2 4-5 4"></path>
+            <circle cx="19.5" cy="5" r="1.5" fill="currentColor" stroke="none"></circle>
+          </svg>
+          Snake
+        </div>
+        <p class="footer-copy">谢谢你来我的官网。这里是我的主页，也是我的资源库——愿你也能在这里找到有用的东西。</p>
+      </div>
+      <div class="subscribe">
+        <div class="subscribe-title">保持联系</div>
+        <div class="subscribe-desc">留下邮箱，第一时间收到我的新作品与更新。</div>
+        <form class="subscribe-form" id="subForm" novalidate>
+          <input class="subscribe-input" type="email" placeholder="your@email.com" aria-label="邮箱地址" required>
+          <button class="subscribe-btn" type="submit" id="subBtn">
+            <span>订阅</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <span>&copy; 2026 Snake · 保留所有权利。</span>
+      <span>用心生活，保持创造。</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <div class="toast-inner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+    <span id="toastMsg">订阅成功，感谢关注。</span>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lightboxClose" aria-label="关闭">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+  </button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
+<script src="js/main.js" defer></script>
+<script>
+(function() {
+  'use strict';
+
+  // 首页 intro 跳过
+  document.querySelectorAll('a[href="index.html"], a[href^="index.html#"]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      sessionStorage.setItem('snake-skip-intro', '1');
+    });
+  });
+
+  // 灯箱
+  var lightbox = document.getElementById('lightbox');
+  var lightboxContent = document.getElementById('lightboxContent');
+  var lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(src, type) {
+    lightboxContent.innerHTML = '';
+    if (type === 'video') {
+      var video = document.createElement('video');
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      lightboxContent.appendChild(video);
+    } else {
+      var img = document.createElement('img');
+      img.src = src;
+      img.alt = '预览';
+      lightboxContent.appendChild(img);
+    }
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightboxContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.gallery-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      openLightbox(item.dataset.src, item.dataset.type);
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+  });
+})();
+</script>
+</body>
+</html>

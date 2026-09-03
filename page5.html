@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snake · 关于我</title>
+<meta name="description" content="关于 STEVEN（Snake）—— 安卓忠实粉丝，热爱折腾电脑、刷机、装系统，以及一切与 IT 相关的事物。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* 常驻平台标题行 */
+.marquee-head {
+  max-width: 960px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.marquee-title {
+  margin: 12px 0 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+}
+
+/* 常驻平台展示 - 横向 marquee 跑马灯 */
+.marquee {
+  --marquee-duration: 68s;
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-bottom: 80px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  padding: 8px 24px;
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee-item {
+  flex: 0 0 280px;
+  padding: 32px 24px;
+  border-radius: 22px;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.marquee-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.marquee-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+
+.marquee-item-img {
+  display: block;
+  max-width: 220px;
+  width: 100%;
+  height: 84px;
+  margin: 0 auto 16px;
+  padding: 8px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  object-fit: contain;
+}
+
+.marquee-item-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  min-height: 44px;
+}
+
+/* 减少动效偏好：改为手动横向滚动 */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 720px) {
+  .marquee {
+    margin-bottom: 56px;
+  }
+  .marquee-item {
+    flex: 0 0 240px;
+    padding: 24px 18px;
+  }
+  .marquee-item-img {
+    height: 72px;
+    max-width: 180px;
+  }
+  .marquee-item-text {
+    font-size: 13px;
+  }
+}
+
+/* 联系我按钮 - 玻璃效果同款 */
+.contact-fab {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--shadow);
+  color: var(--text-primary);
+  font-family: "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+}
+
+.contact-fab:hover {
+  transform: translateY(-2px);
+  border-color: var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-fab:active {
+  transform: translateY(0);
+}
+
+.contact-fab-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.contact-fab-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 720px) {
+  .contact-fab {
+    left: 16px;
+    bottom: 16px;
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+}
+
+/* 联系我弹窗 */
+.contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.contact-modal.is-open {
+  display: flex;
+  animation: contactFadeIn 200ms ease-out;
+}
+
+@keyframes contactFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.contact-modal-card {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  padding: 28px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--shadow);
+  text-align: center;
+  animation: contactScaleIn 280ms cubic-bezier(.18,.89,.32,1.18);
+}
+
+@keyframes contactScaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.contact-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 200ms, background 200ms;
+}
+
+.contact-modal-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.contact-modal-title {
+  margin: 4px 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.contact-modal-desc {
+  margin: 0 0 18px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.contact-modal-img-wrap {
+  padding: 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  display: inline-block;
+}
+
+.contact-modal-img {
+  display: block;
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.contact-modal-hint {
+  margin: 16px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="返回首页">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.5 2c-3.5 0-5.5 2.5-5.5 5 0 2.5 2 3.5 3.5 4.5s3 2 3 4c0 2-1.5 3.5-4 3.5a6.5 6.5 0 0 1-6.5-6.5"></path>
+          <path d="M18 10.5a3.5 3.5 0 0 0-3.5 3.5c0 1.5 1 2.5 2 3.5s1.5 2 1.5 3.5c0 2.5-2 4-5 4"></path>
+          <circle cx="19.5" cy="5" r="1.5" fill="currentColor" stroke="none"></circle>
+        </svg>
+        Snake
+      </a>
+      <nav class="nav-links" role="navigation" aria-label="主导航">
+        <a href="index.html">首页</a>
+        <a href="index.html">回到上一页</a>
+      </nav>
+      <button class="icon-btn menu-toggle" id="menuBtn" aria-label="展开菜单" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero profile-hero" id="profile" aria-label="个人简介">
+    <div class="container">
+      <div class="profile-card reveal">
+        <div class="profile-cover" aria-hidden="true">
+          <img src="assets/images/profile-bg.jpg" alt="">
+        </div>
+        <div class="profile-content">
+          <div class="profile-avatar-wrap">
+            <img class="profile-avatar" src="assets/avatars/profile-steven.jpg" alt="STEVEN（Snake）头像" width="120" height="120">
+          </div>
+          <div class="profile-info">
+            <h1 class="profile-name gradient-text">STEVEN <span class="profile-alias">（Snake）</span></h1>
+            <div class="profile-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M9 2v2"></path><path d="M15 2v2"></path><path d="M9 20v2"></path><path d="M15 20v2"></path><path d="M2 9h2"></path><path d="M2 15h2"></path><path d="M20 9h2"></path><path d="M20 15h2"></path></svg>
+              <span>安卓的忠实粉丝</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="about-me" aria-labelledby="about-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-label"><span class="mono">About Me</span></div>
+        <h2 class="section-title" id="about-title">我的<span class="gradient-text">爱好与标签</span></h2>
+        <p class="section-desc">热爱折腾，享受把未知变成已知的过程。</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card reveal" style="transition-delay:0ms;">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+          <h3 class="feature-title">折腾电脑</h3>
+          <p class="feature-text">喜欢研究硬件、优化系统、探索各种软件工具，把电脑调教成最适合自己的样子。</p>
+        </article>
+        <article class="feature-card reveal" style="transition-delay:60ms;">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2 2 12h10V2z"></path><path d="M12 12 2 22h10V12z"></path></svg></div>
+          <h3 class="feature-title">刷机 & 装系统</h3>
+          <p class="feature-text">从安卓 ROM 到各类操作系统，享受解锁、刷入、配置、跑通的全过程。</p>
+        </article>
+        <article class="feature-card reveal" style="transition-delay:120ms;">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2 2 12h10V2z"></path><path d="M12 12 2 22h10V12z"></path></svg></div>
+          <h3 class="feature-title">IT 相关的一切</h3>
+          <p class="feature-text">对新技术保持好奇，遇到不懂的就查、就试、就学，乐在其中。</p>
+        </article>
+        <article class="feature-card reveal" style="transition-delay:180ms;">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M12 18h.01"></path></svg></div>
+          <h3 class="feature-title">安卓的忠实粉丝</h3>
+          <p class="feature-text">自由、开放、可折腾，安卓精神一直是我折腾路上的最大动力。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+<section aria-label="常驻平台">
+  <div class="marquee-head reveal">
+    <div class="section-label"><span class="mono">OS Collection</span></div>
+    <h2 class="marquee-title">我用过的<span class="gradient-text">系统</span>之一</h2>
+  </div>
+  <div class="marquee reveal" role="region" aria-label="常驻平台横滚展示">
+    <div class="marquee-track">
+      <!-- 第一组：5 个平台 -->
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 01</div>
+        <img class="marquee-item-img" src="assets/images/android-logo.png" alt="Android 标志" loading="eager">
+        <p class="marquee-item-text">Android · 我最常折腾的系统，动手能力的主战场。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 02</div>
+        <img class="marquee-item-img" src="assets/images/windows11-logo.png" alt="Windows 11 标志" loading="eager">
+        <p class="marquee-item-text">Windows · 日常开发与折腾的主阵地，Windows 11 也是我熟悉的版本。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 03</div>
+        <img class="marquee-item-img" src="assets/images/arch-logo.png" alt="Arch Linux 标志" loading="eager">
+        <p class="marquee-item-text">Arch · 滚动更新、深度定制，折腾人的 Linux 信仰。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 04</div>
+        <img class="marquee-item-img" src="assets/images/ubuntu-logo.png" alt="Ubuntu 标志" loading="eager">
+        <p class="marquee-item-text">Ubuntu · 折腾路上的老朋友，用它部署一些东西再合适不过。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 05</div>
+        <img class="marquee-item-img" src="assets/images/fedora-logo.png" alt="Fedora 标志" loading="eager">
+        <p class="marquee-item-text">Fedora · 非常开放，我在上面装了各种主题。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 06</div>
+        <img class="marquee-item-img" src="assets/images/debian-logo.png" alt="Debian 标志" loading="eager">
+        <p class="marquee-item-text">Debian · 稳定、纯粹的开源基石，无数发行版的老祖先。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 07</div>
+        <img class="marquee-item-img" src="assets/images/deepin-logo.png" alt="Deepin 标志" loading="eager">
+        <p class="marquee-item-text">Deepin · 国产生态里最漂亮的桌面，体验拉满。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 08</div>
+        <img class="marquee-item-img" src="assets/images/kylin-logo.webp" alt="银河麒麟 Kylin 标志" loading="eager">
+        <p class="marquee-item-text">Kylin · 国产操作系统的代表，政企办公里见得多。</p>
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-item-label">Platform · 09</div>
+        <img class="marquee-item-img" src="assets/images/zorin-logo.png" alt="Zorin OS 标志" loading="eager">
+        <p class="marquee-item-text">Zorin OS · 给 Windows 用户量身打造的 Linux 桌面。</p>
+      </div>
+      <!-- 第二组：无缝循环用（aria-hidden） -->
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 01</div>
+        <img class="marquee-item-img" src="assets/images/android-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Android · 我最常折腾的系统，动手能力的主战场。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 02</div>
+        <img class="marquee-item-img" src="assets/images/windows11-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Windows · 日常开发与折腾的主阵地，Windows 11 也是我熟悉的版本。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 03</div>
+        <img class="marquee-item-img" src="assets/images/arch-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Arch · 滚动更新、深度定制，折腾人的 Linux 信仰。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 04</div>
+        <img class="marquee-item-img" src="assets/images/ubuntu-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Ubuntu · 折腾路上的老朋友，用它部署一些东西再合适不过。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 05</div>
+        <img class="marquee-item-img" src="assets/images/fedora-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Fedora · 非常开放，我在上面装了各种主题。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 06</div>
+        <img class="marquee-item-img" src="assets/images/debian-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Debian · 稳定、纯粹的开源基石，无数发行版的老祖先。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 07</div>
+        <img class="marquee-item-img" src="assets/images/deepin-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Deepin · 国产生态里最漂亮的桌面，体验拉满。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 08</div>
+        <img class="marquee-item-img" src="assets/images/kylin-logo.webp" alt="" loading="eager">
+        <p class="marquee-item-text">Kylin · 国产操作系统的代表，政企办公里见得多。</p>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <div class="marquee-item-label">Platform · 09</div>
+        <img class="marquee-item-img" src="assets/images/zorin-logo.png" alt="" loading="eager">
+        <p class="marquee-item-text">Zorin OS · 给 Windows 用户量身打造的 Linux 桌面。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="quote-section" aria-label="结语">
+    <div class="container">
+      <div class="quote-card reveal">
+        <p>「这个网站不是全部，大部分事情和成果没显示。这里只是我想展示的一角，更多还在路上。」</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="subscribe-footer" aria-label="页脚">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.5 2c-3.5 0-5.5 2.5-5.5 5 0 2.5 2 3.5 3.5 4.5s3 2 3 4c0 2-1.5 3.5-4 3.5a6.5 6.5 0 0 1-6.5-6.5"></path>
+            <path d="M18 10.5a3.5 3.5 0 0 0-3.5 3.5c0 1.5 1 2.5 2 3.5s1.5 2 1.5 3.5c0 2.5-2 4-5 4"></path>
+            <circle cx="19.5" cy="5" r="1.5" fill="currentColor" stroke="none"></circle>
+          </svg>
+          Snake
+        </div>
+        <p class="footer-copy">谢谢你来我的官网。这里是我的主页，也是我的资源库——愿你也能在这里找到有用的东西。</p>
+      </div>
+      <div class="subscribe">
+        <div class="subscribe-title">保持联系</div>
+        <div class="subscribe-desc">留下邮箱，第一时间收到我的新作品与更新。</div>
+        <form class="subscribe-form" id="subForm" novalidate>
+          <input class="subscribe-input" type="email" placeholder="your@email.com" aria-label="邮箱地址" required>
+          <button class="subscribe-btn" type="submit" id="subBtn">
+            <span>订阅</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <span>&copy; 2026 Snake · 保留所有权利。</span>
+      <span>用心生活，保持创造。</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <div class="toast-inner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+    <span id="toastMsg">订阅成功，感谢关注。</span>
+  </div>
+</div>
+
+<!-- 联系我按钮 - 同款玻璃效果 -->
+<button class="contact-fab" id="contactFab" type="button" aria-label="联系我" aria-haspopup="dialog" aria-controls="contactModal">
+  <span class="contact-fab-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+  </span>
+  <span>联系我</span>
+</button>
+
+<!-- 联系我二维码弹窗 -->
+<div class="contact-modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+  <div class="contact-modal-card" role="document">
+    <button class="contact-modal-close" id="contactModalClose" type="button" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+    </button>
+    <h3 class="contact-modal-title" id="contactModalTitle">联系我</h3>
+    <p class="contact-modal-desc">扫码添加微信，期待和你一起折腾、一起交流。</p>
+    <div class="contact-modal-img-wrap">
+      <img class="contact-modal-img" src="assets/images/wechat-qr.jpg" alt="微信二维码 · 联系我" loading="eager">
+    </div>
+    <p class="contact-modal-hint">扫一扫 · 即刻联系</p>
+  </div>
+</div>
+
+<script src="js/main.js" defer></script>
+<script>
+(function() {
+  'use strict';
+  document.querySelectorAll('a[href="index.html"], a[href^="index.html#"]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      sessionStorage.setItem('snake-skip-intro', '1');
+    });
+  });
+
+  // 联系我按钮 + 弹窗交互
+  var fab = document.getElementById('contactFab');
+  var modal = document.getElementById('contactModal');
+  var closeBtn = document.getElementById('contactModalClose');
+
+  function openModal() {
+    modal.classList.add('is-open');
+    fab.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    fab.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    fab.focus();
+  }
+
+  fab.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  // 点击遮罩关闭
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+  // ESC 键关闭
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+})();
+</script>
+</body>
+</html>
